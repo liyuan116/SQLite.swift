@@ -81,6 +81,17 @@ extension Connection {
         try run("SELECT sqlcipher_export(?)", schemaName)
         try detach(schemaName)
     }
+    
+    ///  Decrypt a SQLCipher database to a Plaintext Database.
+    ///
+    /// See https://www.zetetic.net/sqlcipher/sqlcipher-api/#sqlcipher_export
+    public func plaintext_export(_ location: Location, key: String) throws {
+        let schemaName = "plaintext"
+        try run("PRAGMA key = \(key)")
+        try attach(location, as: schemaName, key: "")
+        try run("SELECT sqlcipher_export(?)", schemaName)
+        try detach(schemaName)
+    }
 
     // MARK: - private
     private func _key_v2(db: String,
